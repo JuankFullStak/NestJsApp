@@ -1,0 +1,22 @@
+version: '3.8'
+services:
+  englishapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: englishapp
+    restart: always
+    expose:
+      - 80
+    env_file:
+      - .env
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+      - "traefik.http.routers.englishapp-secure.entrypoints=websecure"
+      - "traefik.http.routers.englishapp-secure.rule=Host(`englishapp.everom.net`)"
+
+networks:
+  default:
+    external:
+      name: proxy
