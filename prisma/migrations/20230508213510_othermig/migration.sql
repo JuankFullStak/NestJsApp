@@ -1,0 +1,4 @@
+-- AlterTable
+ALTER TABLE `Resource` ADD COLUMN `fileName` VARCHAR(191) NULL,
+    ADD COLUMN `originalName` VARCHAR(191) NULL,
+    MODIFY `type` ENUM('IMAGE', 'AUDIO', 'VIDEO') NOT NULL DEFAULT 'IMAGE';

@@ -40,6 +40,8 @@ model Chapter {
 
 model Resource {
   id        Int      @id @default(autoincrement())
+  originalName String?
+  fileName   String?
   chapter   Chapter  @relation(fields: [chapterId], onDelete: Cascade, onUpdate: Cascade, references: [id])
   chapterId Int
   path      String
@@ -49,6 +51,7 @@ model Resource {
 enum FileType {
   IMAGE
   AUDIO
+  VIDEO
 }
 
 model Question {
