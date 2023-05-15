@@ -22,8 +22,8 @@ import {
 import { ChapterEntity } from './entities/chapter.entity';
 
 @ApiBearerAuth()
-@Controller('chapters')
 @ApiTags('chapters')
+@Controller('chapters')
 export class ChapterController {
   constructor(private readonly chapterService: ChapterService) {}
 
@@ -74,7 +74,7 @@ export class ChapterController {
     description: 'The found record',
     type: ChapterEntity,
   })
-  remove(@Param('id', ParseIntPipe) id: number) {
-    return this.chapterService.remove(id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.chapterService.remove(id);
   }
 }

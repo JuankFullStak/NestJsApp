@@ -10,6 +10,9 @@ import { ChapterModule } from './chapter/chapter.module';
 import config from 'src/common/configs/config';
 import { APP_INTERCEPTOR } from '@nestjs/core';
 import { ResourceModule } from './resource/resource.module';
+import { QuestionsModule } from './questions/questions.module';
+import { ProgressModule } from './progress/progress.module';
+import { OptionsModule } from './options/options.module';
 
 @Module({
   imports: [
@@ -31,6 +34,9 @@ import { ResourceModule } from './resource/resource.module';
     CategoriesModule,
     ChapterModule,
     ResourceModule,
+    QuestionsModule,
+    OptionsModule,
+    ProgressModule,
   ],
   controllers: [AppController],
   providers: [
