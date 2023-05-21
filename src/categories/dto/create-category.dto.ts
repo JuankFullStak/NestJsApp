@@ -6,5 +6,6 @@ export class CreateCategoryDto {
 
   description: string;
 
-  image: string;
+  originalName: string;
+  path: string;
 }

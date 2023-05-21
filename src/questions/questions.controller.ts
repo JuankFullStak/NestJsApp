@@ -42,6 +42,11 @@ export class QuestionsController {
     return await this.questionsService.findOne(id);
   }
 
+  @Get('byChapter/:id')
+  async findByChapter(@Param('id', ParseIntPipe) id: number) {
+    return await this.questionsService.findByChapter(id);
+  }
+
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,

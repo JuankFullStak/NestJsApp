@@ -19,8 +19,10 @@ export class CategoryEntity implements Category {
   description: string;
 
   @ApiProperty({
+    name: 'imageFile',
     example: '/file1.jpg',
-    description: 'Image string paths',
+    description: 'Image file',
   })
-  image: string;
+  originalName: string;
+  path: string;
 }

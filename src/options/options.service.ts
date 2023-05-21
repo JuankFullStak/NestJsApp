@@ -16,20 +16,26 @@ export class OptionsService {
     return await this.prismaService.option.findMany();
   }
 
-  async findOne(id: number) {
+  async findOne(id: number): Promise<Option> {
     return await this.prismaService.option.findUnique({
       where: { id },
     });
   }
 
-  async update(id: number, updateOptionDto: UpdateOptionDto) {
+  async findByQuestion(id: number): Promise<void | Option[]> {
+    return await this.prismaService.option.findMany({
+      where: { questionId: id },
+    });
+  }
+
+  async update(id: number, updateOptionDto: UpdateOptionDto): Promise<Option> {
     return await this.prismaService.option.update({
       data: updateOptionDto,
       where: { id },
     });
   }
 
-  async remove(id: number) {
+  async remove(id: number): Promise<Option> {
     return await this.prismaService.option.delete({ where: { id } });
   }
 }

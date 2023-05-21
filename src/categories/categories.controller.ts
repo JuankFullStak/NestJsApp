@@ -7,18 +7,30 @@ import {
   Param,
   Delete,
   ParseIntPipe,
+  UseInterceptors,
+  UploadedFile,
+  ParseFilePipe,
+  StreamableFile,
+  Res,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
 import { UpdateCategoryDto } from './dto/update-category.dto';
 import {
   ApiCreatedResponse,
-  ApiOkResponse,
   ApiResponse,
   ApiTags,
   ApiBearerAuth,
   ApiOperation,
+  ApiBody,
+  ApiNotFoundResponse,
+  ApiForbiddenResponse,
+  ApiHeader,
 } from '@nestjs/swagger';
+import { join } from 'path';
+import { createReadStream } from 'fs';
+import { Response } from 'express';
+import { FileInterceptor } from '@nestjs/platform-express';
 import { CategoryEntity } from './entities/category.entity';
 
 @ApiBearerAuth()
@@ -29,11 +41,57 @@ export class CategoriesController {
 
   @Post()
   @ApiCreatedResponse({ type: CategoryEntity })
+  @ApiBody({ type: CategoryEntity })
   @ApiOperation({ summary: 'Create category' })
-  @ApiResponse({ status: 403, description: 'Forbidden.' })
-  @ApiOkResponse({})
+  @ApiNotFoundResponse({ status: 404, description: 'Not Found' })
+  @ApiForbiddenResponse({ status: 403, description: 'Forbidden' })
   async create(@Body() createCategoryDto: CreateCategoryDto) {
     return await this.categoriesService.create(createCategoryDto);
+  }
+
+  @UseInterceptors(FileInterceptor('file'))
+  @Post('file')
+  @ApiCreatedResponse({ type: CategoryEntity })
+  @ApiOperation({ summary: 'Create category and upload imageFile' })
+  @ApiForbiddenResponse({ status: 403, description: 'Forbidden' })
+  uploadFile(
+    @Body() body: CreateCategoryDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    const { title, description } = body;
+    const originalName = file.originalname;
+    const path = file.path;
+    console.log(file);
+
+    return this.categoriesService.create({
+      title,
+      description,
+      originalName,
+      path,
+    });
+  }
+
+  @Get('file/:id')
+  @ApiCreatedResponse({ type: CategoryEntity })
+  @ApiOperation({ summary: 'get Category imageFile by id' })
+  @ApiNotFoundResponse({ status: 404, description: 'Not Found' })
+  @ApiForbiddenResponse({ status: 403, description: 'Forbidden' })
+  async downloadFile(
+    @Param('id', ParseIntPipe) id: number,
+    @Res({ passthrough: true }) response: Response,
+  ) {
+    const category = await this.categoriesService.findOne(id);
+    if (!category) return;
+    const filePath = join(__dirname, '../..', category.path);
+    const formatt = category.originalName.split('.').pop();
+    response.contentType('image/' + formatt);
+    const file = createReadStream(filePath);
+    return new StreamableFile(file);
   }
 
   @Get()

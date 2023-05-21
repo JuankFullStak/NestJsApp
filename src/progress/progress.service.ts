@@ -22,6 +22,12 @@ export class ProgressService {
     return await this.prismaService.progress.findUnique({ where: { id } });
   }
 
+  async findByQuestion(id: number): Promise<void | Progress[]> {
+    return await this.prismaService.progress.findMany({
+      where: { questionId: id },
+    });
+  }
+
   async update(
     id: number,
     updateProgressDto: UpdateProgressDto,

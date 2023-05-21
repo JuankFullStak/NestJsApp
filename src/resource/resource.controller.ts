@@ -63,6 +63,7 @@ export class ResourceController {
     const originalName = file.originalname;
     const fileName = file.filename;
     const path = file.path;
+    console.log(file);
 
     return this.resourceService.create({
       chapterId,
@@ -71,24 +72,16 @@ export class ResourceController {
       fileName,
       path,
     });
-    // return {
-    //   body,
-    //   file: file.buffer.toString(),
-    // };
   }
 
-  @Get(':id')
+  @Get('file/:id')
   async downloadFile(
     @Param('id', ParseIntPipe) id: number,
     @Res({ passthrough: true }) response: Response,
   ) {
     const resource = await this.resourceService.findOne(id);
     if (!resource) return;
-
-    const filePath = join(
-      '/Users/familia/Developer/Everom/ChildGameApp/ingle-backend/',
-      resource.path,
-    );
+    const filePath = join(__dirname, '../..', resource.path);
     const formatt = resource.originalName.split('.').pop();
     response.contentType(resource.type.toLowerCase().concat('/' + formatt));
     const file = createReadStream(filePath);
@@ -105,6 +98,11 @@ export class ResourceController {
   @ApiCreatedResponse({ type: ResourceEntity })
   findOne(@Param('id', ParseIntPipe) id: number) {
     return this.resourceService.findOne(id);
+  }
+
+  @Get('byChapter/:id')
+  async findByChapter(@Param('id', ParseIntPipe) id: number) {
+    return await this.resourceService.findByChapter(id);
   }
 
   @Patch(':id')

@@ -16,6 +16,12 @@ export class ChapterService {
     return await this.prismaService.chapter.findMany();
   }
 
+  async findByCategory(id: number): Promise<void | Chapter[]> {
+    return await this.prismaService.chapter.findMany({
+      where: { categoryId: id },
+    });
+  }
+
   async findOne(id: number): Promise<Chapter> {
     return await this.prismaService.chapter.findUnique({
       where: { id },

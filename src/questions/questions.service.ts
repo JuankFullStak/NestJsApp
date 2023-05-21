@@ -24,6 +24,12 @@ export class QuestionsService {
     });
   }
 
+  async findByChapter(id: number): Promise<void | Question[]> {
+    return await this.prismaService.question.findMany({
+      where: { chapterId: id },
+    });
+  }
+
   async update(
     id: number,
     updateQuestionDto: UpdateQuestionDto,

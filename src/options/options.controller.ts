@@ -42,16 +42,21 @@ export class OptionsController {
     return await this.optionsService.findOne(id);
   }
 
+  @Get('byQuestion/:id')
+  async findByQuestion(@Param('id', ParseIntPipe) id: number) {
+    return await this.optionsService.findByQuestion(id);
+  }
+
   @Patch(':id')
   async update(
     @Param('id', ParseIntPipe) id: number,
     @Body() updateOptionDto: UpdateOptionDto,
   ) {
-    return await this.optionsService.update(+id, updateOptionDto);
+    return await this.optionsService.update(id, updateOptionDto);
   }
 
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return await this.optionsService.remove(+id);
+  async remove(@Param('id', ParseIntPipe) id: number) {
+    return await this.optionsService.remove(id);
   }
 }

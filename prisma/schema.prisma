@@ -21,11 +21,12 @@ model User {
 }
 
 model Category {
-  id          Int       @id @default(autoincrement())
-  title       String    @unique
-  description String?
-  image       String?
-  Chapter     Chapter[]
+  id           Int       @id @default(autoincrement())
+  title        String    @unique
+  description  String?
+  originalName String?
+  path         String?
+  Chapter      Chapter[]
 }
 
 model Chapter {
@@ -39,13 +40,13 @@ model Chapter {
 }
 
 model Resource {
-  id        Int      @id @default(autoincrement())
+  id           Int      @id @default(autoincrement())
   originalName String?
-  fileName   String?
-  chapter   Chapter  @relation(fields: [chapterId], onDelete: Cascade, onUpdate: Cascade, references: [id])
-  chapterId Int
-  path      String
-  type      FileType @default(IMAGE)
+  fileName     String?
+  chapter      Chapter  @relation(fields: [chapterId], onDelete: Cascade, onUpdate: Cascade, references: [id])
+  chapterId    Int
+  path         String
+  type         FileType @default(IMAGE)
 }
 
 enum FileType {
@@ -65,20 +66,20 @@ model Question {
 }
 
 model Option {
-  id          Int      @id @default(autoincrement())
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id         Int      @id @default(autoincrement())
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   questionId Int
-  body        String
-  correct     Boolean
+  body       String
+  correct    Boolean
 }
 
 model Progress {
-  id          Int      @id @default(autoincrement())
-  question    Question @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  id         Int      @id @default(autoincrement())
+  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
   questionId Int
-  user        User     @relation(fields: [userId], references: [id])
+  user       User     @relation(fields: [userId], references: [id])
   userId     Int
-  score       Int
-  opened      Boolean
-  finished    Boolean
+  score      Int
+  opened     Boolean
+  finished   Boolean
 }

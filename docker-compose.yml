@@ -16,7 +16,7 @@ services:
       - "traefik.enable=true"
       - "traefik.http.routers.englishapp.rule=Host(`englishapp.alfredoacservices.com`)"
       - "traefik.http.routers.englishapp.entrypoints=web"
-      - "traefik.http.services.englishapp.loadbalancer.server.port=3001"
+      - "traefik.http.services.englishapp.loadbalancer.server.port=3000"
       - "traefik.http.middlewares.englishapp-https-redirect.redirectscheme.scheme=websecure"
       - "traefik.http.routers.englishapp.middlewares=englishapp-https-redirect"
       - "traefik.http.routers.englishapp-secure.entrypoints=websecure"

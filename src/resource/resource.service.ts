@@ -22,6 +22,12 @@ export class ResourceService {
     return await this.prismaService.resource.findUnique({ where: { id } });
   }
 
+  async findByChapter(id: number): Promise<void | Resource[]> {
+    return await this.prismaService.resource.findMany({
+      where: { chapterId: id },
+    });
+  }
+
   async update(
     id: number,
     updateResourceDto: UpdateResourceDto,

@@ -55,6 +55,16 @@ export class ChapterController {
     return await this.chapterService.findOne(id);
   }
 
+  @Get('byCategory/:id')
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: ChapterEntity,
+  })
+  async findBycategory(@Param('id', ParseIntPipe) id: number) {
+    return await this.chapterService.findByCategory(id);
+  }
+
   @Patch(':id')
   @ApiResponse({
     status: 200,
