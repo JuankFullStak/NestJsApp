@@ -61,16 +61,21 @@ model Question {
   chapterId Int
   body      String?
 
+  originalName String?
+  path         String?
+
   Option   Option[]
   Progress Progress[]
 }
 
 model Option {
-  id         Int      @id @default(autoincrement())
-  question   Question @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
-  questionId Int
-  body       String
-  correct    Boolean
+  id           Int      @id @default(autoincrement())
+  question     Question @relation(fields: [questionId], references: [id], onDelete: Cascade, onUpdate: Cascade)
+  questionId   Int
+  body         String?
+  originalName String?
+  path         String?
+  correct      Boolean
 }
 
 model Progress {

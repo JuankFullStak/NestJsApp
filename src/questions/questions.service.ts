@@ -14,8 +14,10 @@ export class QuestionsService {
     });
   }
 
-  async findAll(): Promise<Question[]> {
-    return await this.prismaService.question.findMany();
+  async findAll(expand = false): Promise<Question[]> {
+    return await this.prismaService.question.findMany({
+      include: { Option: expand },
+    });
   }
 
   async findOne(id: number): Promise<Question> {
@@ -27,6 +29,13 @@ export class QuestionsService {
   async findByChapter(id: number): Promise<void | Question[]> {
     return await this.prismaService.question.findMany({
       where: { chapterId: id },
+    });
+  }
+
+  async questionsByCategory(id: number) {
+    return await this.prismaService.chapter.findMany({
+      include: { Question: true },
+      where: { categoryId: id },
     });
   }
 

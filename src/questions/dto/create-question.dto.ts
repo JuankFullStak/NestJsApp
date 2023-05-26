@@ -6,4 +6,7 @@ export class CreateQuestionDto {
 
   @IsNotEmpty()
   body: string;
+
+  originalName: string;
+  path: string;
 }

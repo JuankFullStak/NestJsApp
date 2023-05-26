@@ -9,4 +9,6 @@ export class CreateOptionDto {
 
   @IsNotEmpty()
   correct: boolean;
+  originalName: string;
+  path: string;
 }

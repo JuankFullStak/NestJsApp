@@ -100,6 +100,22 @@ export class CategoriesController {
     return await this.categoriesService.findAll();
   }
 
+  // @Get()
+  // @ApiCreatedResponse({ type: CategoryResponseDto, isArray: true })
+  // async findAllWithImage(
+  //   @Res({ passthrough: true }) response: Response,
+  // ): Promise<CategoryResponseDto[]> {
+  //   const categories = await this.categoriesService.findAll();
+  //   if (!categories) return;
+  //   const cat = categories.map((category) => {
+  //     const filePath = join(__dirname, '../..', category.path);
+  //     const formatt = category.originalName.split('.').pop();
+  //     response.contentType('image/' + formatt);
+  //     const file = createReadStream(filePath);
+  //     category[image] = new StreamableFile(file);
+  //   });
+  // }
+
   @Get(':id')
   @ApiResponse({
     status: 200,

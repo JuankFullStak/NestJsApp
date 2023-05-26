@@ -10,4 +10,7 @@ export class QuestionEntity implements Question {
 
   @ApiProperty({ required: true })
   body: string;
+
+  originalName: string;
+  path: string;
 }

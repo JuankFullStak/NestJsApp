@@ -12,4 +12,7 @@ export class OptionEntity implements Option {
 
   @ApiProperty({ required: true })
   correct: boolean;
+
+  originalName: string;
+  path: string;
 }
