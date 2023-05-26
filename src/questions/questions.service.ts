@@ -33,9 +33,14 @@ export class QuestionsService {
   }
 
   async questionsByCategory(id: number) {
-    return await this.prismaService.chapter.findMany({
-      include: { Question: true },
+    const chapters = await this.prismaService.chapter.findMany({
+      select: { id: true },
       where: { categoryId: id },
+    });
+    const res = chapters.map((chapter) => chapter.id);
+    if (!res) return;
+    return await this.prismaService.question.findMany({
+      where: { chapterId: { in: res } },
     });
   }
 
