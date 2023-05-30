@@ -1,17 +1,15 @@
 import { IsNotEmpty } from 'class-validator';
 
 export class CreateProgressDto {
+  correct: number;
+
+  incorrect: number;
+
   @IsNotEmpty()
   score: number;
 
   @IsNotEmpty()
-  opened: boolean;
-
-  @IsNotEmpty()
-  finished: boolean;
-
-  @IsNotEmpty()
-  questionId: number;
+  categoryId: number;
 
   @IsNotEmpty()
   userId: number;

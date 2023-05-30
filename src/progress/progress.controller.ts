@@ -34,9 +34,9 @@ export class ProgressController {
     return await this.progressService.findOne(id);
   }
 
-  @Get('byQuestion/:id')
-  async findByQuestion(@Param('id', ParseIntPipe) id: number) {
-    return await this.progressService.findByQuestion(id);
+  @Get('byCategory/:id')
+  async findByCategory(@Param('id', ParseIntPipe) id: number) {
+    return await this.progressService.findByCategory(id);
   }
 
   @Patch(':id')

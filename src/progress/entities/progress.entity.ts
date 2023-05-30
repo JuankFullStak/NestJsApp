@@ -6,7 +6,7 @@ export class ProgressEntity implements Progress {
   id: number;
 
   @ApiProperty({ required: true })
-  questionId: number;
+  categoryId: number;
 
   @ApiProperty({ required: true })
   userId: number;
@@ -14,9 +14,9 @@ export class ProgressEntity implements Progress {
   @ApiProperty({ required: true })
   score: number;
 
-  @ApiProperty({ required: true })
-  opened: boolean;
+  @ApiProperty()
+  correct: number;
 
-  @ApiProperty({ required: true })
-  finished: boolean;
+  @ApiProperty()
+  incorrect: number;
 }
