@@ -22,9 +22,9 @@ export class ProgressService {
     return await this.prismaService.progress.findUnique({ where: { id } });
   }
 
-  async findByCategory(id: number): Promise<void | Progress[]> {
+  async findByCategory(id: number, userId: number): Promise<void | Progress[]> {
     return await this.prismaService.progress.findMany({
-      where: { categoryId: id },
+      where: { categoryId: id, userId },
     });
   }
 

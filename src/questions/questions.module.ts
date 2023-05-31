@@ -12,9 +12,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
       useFactory: async (configService: ConfigService) => ({
         dest: configService.get<string>('MULTER_DEST'),
         fileFilter(req, file, callback) {
-          const allowedMimes = ['audio'];
+          const allowedMimes = ['audio/mp3'];
           // validar si es un audio a través de su extensión
-          const mimeType = file.mimetype.split('/')[0];
+          const mimeType = file.mimetype;
           const isAllowed = allowedMimes.includes(mimeType);
           console.log('Is Allowed ', isAllowed);
 

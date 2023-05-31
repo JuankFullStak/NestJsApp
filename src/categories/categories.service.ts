@@ -14,8 +14,19 @@ export class CategoriesService {
     });
   }
 
-  async findAll(): Promise<Category[]> {
-    return await this.prismaService.category.findMany();
+  async findAll(userId: number): Promise<Category[]> {
+    return await this.prismaService.category.findMany({
+      include: {
+        Progress: {
+          select: {
+            score: true,
+          },
+          where: {
+            userId,
+          },
+        },
+      },
+    });
   }
 
   async findOne(id: number): Promise<Category> {
