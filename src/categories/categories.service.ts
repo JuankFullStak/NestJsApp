@@ -24,7 +24,7 @@ export class CategoriesService {
           where: {
             userId,
           },
-          take: 1
+          take: 1,
         },
       },
     });

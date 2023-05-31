@@ -4,6 +4,7 @@ import { CategoriesController } from './categories.controller';
 import { MulterModule } from '@nestjs/platform-express';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { PrismaService } from '../prisma/prisma.service';
+import { JwtService } from '@nestjs/jwt';
 
 @Module({
   imports: [
@@ -27,6 +28,6 @@ import { PrismaService } from '../prisma/prisma.service';
     }),
   ],
   controllers: [CategoriesController],
-  providers: [CategoriesService, PrismaService],
+  providers: [CategoriesService, PrismaService, JwtService],
 })
 export class CategoriesModule {}

@@ -6,15 +6,12 @@ import {
   Patch,
   Param,
   Delete,
-  Request,
   ParseIntPipe,
-  UseGuards,
 } from '@nestjs/common';
 import { ProgressService } from './progress.service';
 import { CreateProgressDto } from './dto/create-progress.dto';
 import { UpdateProgressDto } from './dto/update-progress.dto';
 import { ApiTags, ApiBearerAuth } from '@nestjs/swagger';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
 
 @ApiBearerAuth()
 @ApiTags('progress')
@@ -36,9 +33,11 @@ export class ProgressController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.progressService.findOne(id);
   }
-  // @UseGuards(JwtAuthGuard)
   @Get('byCategory/:id/:userId')
-  async findByCategory(@Param('id', ParseIntPipe) id: number,@Param('userId', ParseIntPipe) userId: number, @Request() req) {
+  async findByCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Param('userId', ParseIntPipe) userId: number,
+  ) {
     return await this.progressService.findByCategory(id, userId);
   }
 

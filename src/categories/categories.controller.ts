@@ -13,7 +13,6 @@ import {
   ParseFilePipe,
   StreamableFile,
   Res,
-  UseGuards,
 } from '@nestjs/common';
 import { CategoriesService } from './categories.service';
 import { CreateCategoryDto } from './dto/create-category.dto';
@@ -27,20 +26,22 @@ import {
   ApiBody,
   ApiNotFoundResponse,
   ApiForbiddenResponse,
-  ApiHeader,
 } from '@nestjs/swagger';
 import { join } from 'path';
 import { createReadStream } from 'fs';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CategoryEntity } from './entities/category.entity';
-import { JwtAuthGuard } from 'src/auth/jwt-auth.guard';
+import { JwtService } from '@nestjs/jwt';
 
 @ApiBearerAuth()
 @Controller('categories')
 @ApiTags('categories')
 export class CategoriesController {
-  constructor(private readonly categoriesService: CategoriesService) {}
+  constructor(
+    private readonly categoriesService: CategoriesService,
+    private jwtService: JwtService,
+  ) {}
 
   @Post()
   @ApiCreatedResponse({ type: CategoryEntity })
@@ -97,11 +98,11 @@ export class CategoriesController {
     return new StreamableFile(file);
   }
 
-  @UseGuards(JwtAuthGuard)
   @Get()
   @ApiCreatedResponse({ type: CategoryEntity, isArray: true })
   async findAll(@Request() req) {
-    const userId = req.user.id;
+    const token = req.headers.authorization.split(' ')[1];
+    const userId = this.jwtService.decode(token)['userId'];
     return await this.categoriesService.findAll(userId);
   }
 
