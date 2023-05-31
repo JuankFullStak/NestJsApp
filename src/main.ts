@@ -54,5 +54,6 @@ async function bootstrap() {
     app.enableCors();
   }
   await app.listen(process.env.PORT || nestConfig.port || 3001);
+  console.log("server running at port:", process.env.PORT || nestConfig.port || 3001);
 }
 bootstrap();

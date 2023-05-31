@@ -36,10 +36,9 @@ export class ProgressController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.progressService.findOne(id);
   }
-  @UseGuards(JwtAuthGuard)
-  @Get('byCategory/:id')
-  async findByCategory(@Param('id', ParseIntPipe) id: number, @Request() req) {
-    const userId = req.user.id;
+  // @UseGuards(JwtAuthGuard)
+  @Get('byCategory/:id/:userId')
+  async findByCategory(@Param('id', ParseIntPipe) id: number,@Param('userId', ParseIntPipe) userId: number, @Request() req) {
     return await this.progressService.findByCategory(id, userId);
   }
 
