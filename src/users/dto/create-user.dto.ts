@@ -12,4 +12,6 @@ export class CreateUserDto {
 
   @ApiProperty({ required: false })
   name?: string;
+  @ApiProperty({ required: false })
+  isAdmin?: boolean;
 }

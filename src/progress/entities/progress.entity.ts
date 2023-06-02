@@ -14,9 +14,9 @@ export class ProgressEntity implements Progress {
   @ApiProperty({ required: true })
   score: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   correct: number;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   incorrect: number;
 }

@@ -21,6 +21,7 @@ export class ProgressController {
 
   @Post()
   async create(@Body() createProgressDto: CreateProgressDto) {
+    console.log(createProgressDto);
     return await this.progressService.create(createProgressDto);
   }
 
@@ -46,6 +47,7 @@ export class ProgressController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateProgressDto: UpdateProgressDto,
   ) {
+    console.log(updateProgressDto);
     return await this.progressService.update(id, updateProgressDto);
   }
 

@@ -47,6 +47,7 @@ export class UsersController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateUserDto: UpdateUserDto,
   ): Promise<UserResponseDto> {
+    console.log(updateUserDto);
     return await this.usersService.update(id, updateUserDto);
   }
 

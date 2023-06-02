@@ -101,7 +101,9 @@ export class CategoriesController {
   @Get()
   @ApiCreatedResponse({ type: CategoryEntity, isArray: true })
   async findAll(@Request() req) {
-    const token = req.headers.authorization.split(' ')[1];
+    const { authorization } = req?.headers;
+    if (!authorization) return;
+    const token = authorization.split(' ')[1];
     const userId = this.jwtService.decode(token)['userId'];
     return await this.categoriesService.findAll(userId);
   }
@@ -142,6 +144,7 @@ export class CategoriesController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
+    console.log(' Update:', updateCategoryDto);
     return await this.categoriesService.update(id, updateCategoryDto);
   }
 
