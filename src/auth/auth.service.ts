@@ -23,6 +23,10 @@ export class AuthService {
     private readonly configService: ConfigService,
   ) {}
 
+  async hashPassword(password: string): Promise<string> {
+    return await this.passwordService.hashPassword(password);
+  }
+
   async createUser(payload: SignupInput): Promise<Token> {
     const hashedPassword = await this.passwordService.hashPassword(
       payload.password,
