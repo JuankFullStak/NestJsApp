@@ -31,7 +31,7 @@ import {
 import { FileInterceptor } from '@nestjs/platform-express';
 import { QuestionEntity } from './entities/question.entity';
 import { join } from 'path';
-import { createReadStream } from 'fs';
+import { createReadStream, unlinkSync } from 'fs';
 import { Response } from 'express';
 import { expand } from 'rxjs';
 
@@ -59,8 +59,6 @@ export class QuestionsController {
   ) {
     body.originalName = file.originalname;
     body.path = file.path;
-    console.log(file);
-
     return this.questionsService.create(body);
   }
 
@@ -102,6 +100,28 @@ export class QuestionsController {
     const file = createReadStream(filePath);
     return new StreamableFile(file);
   }
+  @UseInterceptors(FileInterceptor('file'))
+  @Patch('file/:id')
+  async updateAll(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateQuestionDto: UpdateQuestionDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    const { chapterId, body } = updateQuestionDto;
+    const originalName = file.originalname;
+    const path = file.path;
+    return await this.questionsService.update(id, {
+      chapterId,
+      body,
+      originalName,
+      path,
+    });
+  }
 
   @Patch(':id')
   async update(
@@ -113,6 +133,14 @@ export class QuestionsController {
 
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return await this.questionsService.remove(id);
+    try {
+      const question = await this.questionsService.findOne(id);
+      if (!question) return;
+      const filePath = join(__dirname, '../..', question.path);
+      unlinkSync(filePath);
+      return await this.questionsService.remove(id);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

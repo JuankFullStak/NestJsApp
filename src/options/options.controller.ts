@@ -29,7 +29,7 @@ import {
 import { OptionEntity } from './entities/option.entity';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { join } from 'path';
-import { createReadStream } from 'fs';
+import { createReadStream, unlinkSync } from 'fs';
 import { Response } from 'express';
 
 @ApiBearerAuth()
@@ -56,7 +56,6 @@ export class OptionsController {
   ) {
     body.originalName = file.originalname;
     body.path = file.path;
-    console.log(file);
 
     return this.optionsService.create(body);
   }
@@ -93,6 +92,30 @@ export class OptionsController {
     const file = createReadStream(filePath);
     return new StreamableFile(file);
   }
+  @UseInterceptors(FileInterceptor('file'))
+  @Patch('file/:id')
+  async updateAll(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateOptionDto: UpdateOptionDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    const { questionId, correct, body } = updateOptionDto;
+    const originalName = file.originalname;
+    const path = file.path;
+    console.log(`Correct is: ${correct}`);
+    return await this.optionsService.update(id, {
+      questionId,
+      correct,
+      body,
+      originalName,
+      path,
+    });
+  }
 
   @Patch(':id')
   async update(
@@ -104,6 +127,14 @@ export class OptionsController {
 
   @Delete(':id')
   async remove(@Param('id', ParseIntPipe) id: number) {
-    return await this.optionsService.remove(id);
+    try {
+      const option = await this.optionsService.findOne(id);
+      if (!option) return;
+      const filePath = join(__dirname, '../..', option.path);
+      unlinkSync(filePath);
+      return await this.optionsService.remove(id);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }

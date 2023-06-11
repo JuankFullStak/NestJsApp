@@ -28,7 +28,7 @@ import {
   ApiForbiddenResponse,
 } from '@nestjs/swagger';
 import { join } from 'path';
-import { createReadStream } from 'fs';
+import { createReadStream, unlinkSync } from 'fs';
 import { Response } from 'express';
 import { FileInterceptor } from '@nestjs/platform-express';
 import { CategoryEntity } from './entities/category.entity';
@@ -70,7 +70,6 @@ export class CategoriesController {
     const { title, description } = body;
     const originalName = file.originalname;
     const path = file.path;
-    console.log(file);
 
     return this.categoriesService.create({
       title,
@@ -133,6 +132,36 @@ export class CategoriesController {
   async findOne(@Param('id', ParseIntPipe) id: number) {
     return await this.categoriesService.findOne(id);
   }
+  @UseInterceptors(FileInterceptor('file'))
+  @Patch('file/:id')
+  @ApiResponse({
+    status: 200,
+    description: 'The found record',
+    type: CategoryEntity,
+  })
+  async updateAll(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateCategoryDto: UpdateCategoryDto,
+    @UploadedFile(
+      new ParseFilePipe({
+        validators: [
+          //new MaxFileSizeValidator({ maxSize: 1000 }),
+          //new FileTypeValidator({ fileType: 'image/jpg' }),
+          //new FileTypeValidator({ fileType: 'video/mp4' }),
+        ],
+      }),
+    )
+    file: Express.Multer.File,
+  ) {
+    const { title } = updateCategoryDto;
+    const originalName = file.originalname;
+    const path = file.path;
+    return await this.categoriesService.update(id, {
+      title,
+      originalName,
+      path,
+    });
+  }
 
   @Patch(':id')
   @ApiResponse({
@@ -144,7 +173,6 @@ export class CategoriesController {
     @Param('id', ParseIntPipe) id: number,
     @Body() updateCategoryDto: UpdateCategoryDto,
   ) {
-    console.log(' Update:', updateCategoryDto);
     return await this.categoriesService.update(id, updateCategoryDto);
   }
 
@@ -156,6 +184,10 @@ export class CategoriesController {
   })
   @ApiCreatedResponse({ type: CategoryEntity })
   async remove(@Param('id', ParseIntPipe) id: number) {
+    const category = await this.categoriesService.findOne(id);
+    if (!category) return;
+    const filePath = join(__dirname, '../..', category.path);
+    unlinkSync(filePath);
     return await this.categoriesService.remove(id);
   }
 }

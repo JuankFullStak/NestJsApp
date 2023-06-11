@@ -1,19 +1,20 @@
 import { PrismaClient } from '@prisma/client';
-import { hash } from 'bcrypt';
+import { hashSync } from 'bcrypt';
 
 // initialize Prisma Client
 const prisma = new PrismaClient();
-const pass = async () => hash('admin', 10);
+const pass = hashSync('admin', 10);
 
 async function main() {
   // create admin user if not exist
+  //const pass = await hashing();
   const userAdmin = await prisma.user.upsert({
     where: { email: 'admin@g.com' },
     update: {},
     create: {
       email: 'admin@g.com',
       name: 'admin',
-      password: pass.toString(),
+      password: pass,
       isAdmin: true,
     },
   });

@@ -8,7 +8,7 @@ export class QuestionEntity implements Question {
   @ApiProperty({ required: true })
   chapterId: number;
 
-  @ApiProperty({ required: true })
+  @ApiProperty({ required: false })
   body: string;
 
   originalName: string;
